@@ -12,10 +12,13 @@
 ### Description
 
 Functions Included in File
+#### For Setup Purposes
 - setupZoidbergsArray()
+- setupImages()
+
+#### For Animation Purposes
 - birthZoidberg( locX, locY)
 - animateAllZoidbergs()
-- setupImage()
 
 Class Included in File
 - Zoidberg
