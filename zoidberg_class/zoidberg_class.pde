@@ -10,17 +10,15 @@ int frameNo = 0;
 void setup() {
 	setupImages();
 	size(1000, 1000);	
+
+	//Set up zoidbergs arraylist
+	setupZoidbergsArray();
 }
 
 void draw() {
 
-	//Set up zoidbergs arraylist
-	setupZoidbergsArray();
+	animateAllZoidbergs();
 
-	float gridX = width/2-woopwoop[0].width/2;
-	float gridY = height/2-woopwoop[0].height/2; 
-
-	birthZoidberg(gridX, gridY);
 }
 
 
@@ -44,7 +42,7 @@ void birthZoidberg(float locX, float locY){
 void animateAllZoidbergs(){
 	for (int i = 0; i < zoidbergs.size(); i++){
 		Zoidberg focus = zoidbergs.get(i); //The Zoidberg object we are currently getting to update
-		focus.woopwoop(); //Make this Zoidberg object go woopwoop 
+		focus.runZoidberg(); //Make this Zoidberg object go woopwoop 
 		
 		//Removes this Zoidberg object from array if he is off screen.
 		if (focus.onScreen == false){
@@ -60,11 +58,20 @@ void animateAllZoidbergs(){
 //- - - - - - - - - - - - - - - 
 //THIS LOADS ALL THE IMAGES USED BY THE Zoidberg CLASS, RUN IT IN SETUP()
 void setupImages(){
-	woopwoop = new PImage[ANIMATION_FRAMES-1]; //Set up woopwoop array to the number of animation frames
-	for (int i = 0; i < ANIMATION_FRAMES-1; i++){ //Load images into array
+	woopwoop = new PImage[ANIMATION_FRAMES]; //Set up woopwoop array to the number of animation frames
+	for (int i = 0; i < ANIMATION_FRAMES; i++){ //Load images into array
 		woopwoop[i] = loadImage("img/"+i+".png");
 	}
 }	
+
+
+//- - - - - - - - - - - - - - - 
+//FOR DEMO ONLY - RUN birthZoidberg EVERYTIME MOUSE IS CLICKED
+//- - - - - - - - - - - - - - - 
+void mousePressed(){
+	birthZoidberg(mouseX, mouseY);
+}
+
 
 
 //- - - - - - - - - - - - - - - 
@@ -73,7 +80,7 @@ void setupImages(){
 class Zoidberg{
 	PVector location;
 	int woopState; //Used to animate Zoidberg and make him woop
-	int timer; //This allows us to update the Zoidberg image every time draw() has run 50 times
+	int timer; //This allows us to update the Zoidberg image every time draw() has run X number of times
 	boolean onScreen; //True if Zoidberg is on screen
 
 
@@ -82,8 +89,8 @@ class Zoidberg{
 	Zoidberg(float locX, float locY){
 		//Sets Zoidberg's woop state to zero, start of the animation
 		woopState = 0; 
-		//Set timer to 50 to make Zoidberg image update every time draw() has run 50 times
-		timer = 50; 
+		//Set timer to 3 to make Zoidberg image update every time draw() has run 3 times
+		timer = 3; 
 		location = new PVector();
 		onScreen = true; 
 
@@ -102,8 +109,10 @@ class Zoidberg{
 	//Get Zoidberg to go woopwoop. i.e displays zoidberg & keeps animation going
 	void woopwoop(){
 		//Displays next frame of Zoidberg in the correct location 
-
-
+		pushMatrix();
+		translate(location.x, location.y); 
+		image(woopwoop[woopState], -woopwoop[0].width/2, -woopwoop[0].height/2); //Draw frame, using MouseX & Mouse Y as center point. 
+		popMatrix();
 	}
 
 	//Update position of Zoidberg on the screen
@@ -112,20 +121,20 @@ class Zoidberg{
 		//Update the countdown timer. Every time it hits 0, update Zoidberg's woopState
 		if (timer == 0){
 			//First, reset the timer so Zoidberg can continue woopwooping later
-			timer = 50; 
+			timer = 3; 
 			//Update the woopSate (frame number) of Zoidberg's animation
 			if(woopState < ANIMATION_FRAMES-1){
 				woopState++;
+				println(woopState);
 			}
 			else {
 				woopState = 0; 
 			}
 		}
-		else {
-			timer--; //count down
+		else if (timer > 0){
+			timer--; 
+			println(timer);
 		}
-
-
 
 		//Updates the location of Zoidberg since he walks sideways
 
