@@ -16,7 +16,7 @@ void setup() {
 }
 
 void draw() {
-
+	background(20);
 	animateAllZoidbergs();
 
 }
@@ -47,6 +47,7 @@ void animateAllZoidbergs(){
 		//Removes this Zoidberg object from array if he is off screen.
 		if (focus.onScreen == false){
 			zoidbergs.remove(i);
+			println("A Zoidberg has been removed from ArrayList.");
 		}
 	}
 }
@@ -89,8 +90,8 @@ class Zoidberg{
 	Zoidberg(float locX, float locY){
 		//Sets Zoidberg's woop state to zero, start of the animation
 		woopState = 0; 
-		//Set timer to 3 to make Zoidberg image update every time draw() has run 3 times
-		timer = 3; 
+		//Set timer to 2 to make Zoidberg image update every time draw() has run 2 times
+		timer = 2; 
 		location = new PVector();
 		onScreen = true; 
 
@@ -121,11 +122,13 @@ class Zoidberg{
 		//Update the countdown timer. Every time it hits 0, update Zoidberg's woopState
 		if (timer == 0){
 			//First, reset the timer so Zoidberg can continue woopwooping later
-			timer = 3; 
+			timer = 2; 
 			//Update the woopSate (frame number) of Zoidberg's animation
 			if(woopState < ANIMATION_FRAMES-1){
 				woopState++;
-				println(woopState);
+				//Move the zoidberg along a crazy path 
+				location.x=location.x - map(noise(woopState), 0, 1, -20, 20);
+				location.y=location.y - map(noise(woopState+10), 0, 1, -10, 10);
 			}
 			else {
 				woopState = 0; 
@@ -133,13 +136,12 @@ class Zoidberg{
 		}
 		else if (timer > 0){
 			timer--; 
-			println(timer);
 		}
 
 		//Updates the location of Zoidberg since he walks sideways
 
 		//Checks if Zoidberg is off screen, set onScreen = false if he is. 
-		if (location.x < -woopwoop[0].width || location.x > width || location.y < -woopwoop[0].height || location.y > height){
+		if (location.x < -woopwoop[0].width || location.x > width+woopwoop[0].width || location.y < -woopwoop[0].height || location.y > height+woopwoop[0].height){
 			onScreen = false; 
 		}
 	}
