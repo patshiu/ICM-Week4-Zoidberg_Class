@@ -9,7 +9,8 @@ int frameNo = 0;
 
 void setup() {
 	setupImages();
-	size(1000, 1000);	
+	size(displayWidth/2, displayHeight/2);	
+	//size(600, 600);
 
 	//Set up zoidbergs arraylist
 	setupZoidbergsArray();
@@ -91,7 +92,7 @@ class Zoidberg{
 		//Sets Zoidberg's woop state to zero, start of the animation
 		woopState = 0; 
 		//Set timer to 2 to make Zoidberg image update every time draw() has run 2 times
-		timer = 2; 
+		timer = 1; 
 		location = new PVector();
 		onScreen = true; 
 
@@ -122,7 +123,7 @@ class Zoidberg{
 		//Update the countdown timer. Every time it hits 0, update Zoidberg's woopState
 		if (timer == 0){
 			//First, reset the timer so Zoidberg can continue woopwooping later
-			timer = 2; 
+			timer = 1; 
 			//Update the woopSate (frame number) of Zoidberg's animation
 			if(woopState < ANIMATION_FRAMES-1){
 				woopState++;
